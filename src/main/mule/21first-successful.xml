@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="c8c46826-06af-470c-a870-9fdb1cf78581" >
+		<http:listener-connection host="localhost" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="f4f4dd36-097b-499c-9418-d19401932897" >
+		<http:request-connection host="localhost" port="8083" />
+	</http:request-config>
+	<flow name="21first-successfulFlow" doc:id="f49d1d56-f7cf-42e4-a382-25d2046d6599" >
+		<http:listener doc:name="Listener" doc:id="df4399bf-3333-4459-b041-7eb05118767e" config-ref="HTTP_Listener_config" path="/firstsuccess"/>
+		<first-successful doc:name="First Successful" doc:id="e424751b-e6d4-4ff1-aebc-7d13fbb01ba8" >
+			<route >
+				<set-payload value="This is the First Route" doc:name="Set Payload" doc:id="d12fe336-def9-48ca-8b2b-5d2e6c5ba371" />
+				<logger level="INFO" doc:name="Logger" doc:id="3dea8964-94fb-4026-a610-9cb3da11cf6c" message="#[payload]"/>
+				<http:request method="GET" doc:name="Request" doc:id="82058494-2850-413f-88db-11e3c7cc9bad" config-ref="HTTP_Request_configuration" path="/test"/>
+			</route>
+			<route >
+				<set-payload value="This is the Second Route" doc:name="Set Payload" doc:id="94001f7c-25df-49a0-aeae-4d73db2bc96b" />
+				<logger level="INFO" doc:name="Logger" doc:id="a6ac5707-32eb-4d9c-acdf-157afe870f1f" message="#[payload]"/>
+			</route>
+			<route >
+				<set-payload value="This is the Third Route" doc:name="Set Payload" doc:id="2066811d-0792-46a9-bfb9-d0e1af6e17d7" />
+				<logger level="INFO" doc:name="Logger" doc:id="a81dcc88-545d-4957-b765-8524459be982" message="#[payload]"/>
+			</route>
+		</first-successful>
+		<logger level="INFO" doc:name="Logger" doc:id="e9d1f489-ba50-4327-8419-9693f0ea3996" message="Finished Execution"/>
+	</flow>
+</mule>
